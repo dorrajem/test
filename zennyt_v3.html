@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zennyt · Je Planifie — UI Kit v3</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --or:#F5A623;--or2:#D4861A;
+  --gr:#3EBD5F;--gr2:#217A3A;
+  --bl:#5B8DEF;--bl2:#3A5BC7;
+  --re:#E53935;--re2:#B71C1C;
+  --ch:#1E1E2E;--ch2:#2D2D42;--ch3:#3D3D56;
+  --w:#fff;--tm:#9A9ABB;--td:#5A5A7A;
+  --f:'Nunito',sans-serif;
+}
+body{font-family:var(--f);background:#08080F;color:var(--w);min-height:100vh}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(8,8,15,.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.05);padding:7px 14px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.brand{font-size:15px;font-weight:900;color:var(--or);margin-right:6px;letter-spacing:-.5px;white-space:nowrap}
+.gb{padding:5px 12px;border-radius:18px;font-size:11px;font-weight:800;cursor:pointer;border:1.5px solid transparent;font-family:var(--f);white-space:nowrap;background:transparent;color:var(--td);transition:all .18s}
+.gb:hover:not(.on){color:var(--or);border-color:rgba(245,166,35,.3)}
+.gb.on.g1{background:var(--or);color:#1A0A00;border-color:var(--or)}
+.gb.on.g2{background:var(--gr);color:#041008;border-color:var(--gr)}
+.gb.on.g3{background:var(--bl);color:#040814;border-color:var(--bl)}
+.gb.on.g4{background:var(--ch3);color:var(--w);border-color:var(--ch3)}
+.nsep{width:1px;height:24px;background:var(--ch3);flex-shrink:0}
+.sb{padding:4px 9px;border-radius:12px;font-size:10px;font-weight:800;cursor:pointer;border:1.5px solid var(--ch3);background:transparent;color:var(--td);font-family:var(--f);white-space:nowrap;transition:all .15s}
+.sb.on{background:var(--ch2);color:var(--w);border-color:rgba(255,255,255,.2)}
+.sb:hover:not(.on){border-color:rgba(245,166,35,.4);color:var(--or)}
+
+/* ── STAGE ── */
+.stage{padding-top:86px;min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:18px;padding-bottom:48px}
+.slbl{font-size:10px;font-weight:700;color:var(--td);letter-spacing:2px;text-transform:uppercase}
+.row{display:flex;gap:24px;align-items:flex-start;justify-content:center;flex-wrap:wrap;padding:0 14px}
+.dev{display:flex;flex-direction:column;align-items:center;gap:5px}
+.dlbl{font-size:9px;color:var(--td);font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.fm{width:320px;height:640px;border-radius:38px;border:3px solid #2e2e48;box-shadow:0 12px 48px rgba(0,0,0,.4),0 0 0 1px rgba(245,166,35,.06);overflow:hidden;position:relative;flex-shrink:0;background:var(--ch)}
+.ft{width:496px;height:640px;border-radius:20px;border:3px solid #2e2e48;box-shadow:0 12px 48px rgba(0,0,0,.4);overflow:hidden;position:relative;flex-shrink:0;background:var(--ch)}
+.fd{width:760px;height:460px;border-radius:10px;border:3px solid #2e2e48;box-shadow:0 12px 48px rgba(0,0,0,.4);overflow:hidden;position:relative;flex-shrink:0;background:var(--ch)}
+
+/* ── SCREEN ── */
+.sc{width:100%;height:100%;position:absolute;inset:0;overflow:hidden;display:none;flex-direction:column;font-family:var(--f)}
+.sc.on{display:flex}
+
+/* ── SHARED ── */
+.hud{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(0,0,0,.25);border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0}
+.hi{display:flex;flex-direction:column;align-items:center;gap:1px}
+.hl{font-size:8px;color:var(--tm);font-weight:700;text-transform:uppercase;letter-spacing:.7px}
+.hv{font-size:14px;font-weight:900;line-height:1.2}
+.hsep{width:1px;height:26px;background:rgba(255,255,255,.07)}
+
+.gfoot{display:flex;gap:8px;padding:10px 14px;border-top:1px solid rgba(255,255,255,.05);flex-shrink:0}
+.bc{flex:1;padding:11px 8px;border-radius:10px;font-size:12px;font-weight:800;border:none;cursor:pointer;font-family:var(--f)}
+.bc.clr{background:rgba(255,255,255,.07);color:var(--tm)}
+.bc.val{color:#0A0A0A}
+
+.btnP{width:100%;padding:13px;border-radius:50px;font-size:13px;font-weight:900;border:none;cursor:pointer;font-family:var(--f);letter-spacing:.3px}
+.btnO{width:100%;padding:11px;border-radius:50px;font-size:12px;font-weight:700;border:2px solid rgba(255,255,255,.15);background:transparent;color:var(--w);cursor:pointer;font-family:var(--f)}
+.btnO:hover{border-color:rgba(255,255,255,.3)}
+
+.sdiv{display:flex;align-items:center;gap:7px;font-size:8px;font-weight:700;color:var(--td);text-transform:uppercase;letter-spacing:1px;padding:5px 14px 2px;flex-shrink:0}
+.sdiv::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.05)}
+
+/* ── HOME ── */
+.home{align-items:center;justify-content:center;padding:22px 20px;position:relative;overflow:hidden}
+.lc{width:88px;height:88px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.gtit{font-size:22px;font-weight:900;color:var(--w);text-align:center;line-height:1.15;letter-spacing:-.5px;margin-bottom:3px}
+.gsub{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+.gdesc{font-size:11px;color:var(--tm);text-align:center;max-width:215px;line-height:1.65;margin-bottom:18px}
+.btns{display:flex;flex-direction:column;gap:8px;width:100%}
+.sbadge{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:8px 13px;margin-top:12px}
+.sbadge .sl{font-size:9px;color:var(--td);font-weight:700;text-transform:uppercase}
+.sbadge .sv{font-size:16px;font-weight:900}
+
+/* ── TUTO ── */
+.tsc{flex-direction:column}
+.thdr{background:rgba(0,0,0,.3);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0}
+.ttit{font-size:12px;font-weight:900;color:var(--w)}
+.tskip{font-size:10px;color:var(--td);font-weight:700;cursor:pointer}
+.tbdy{flex:1;padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px;overflow:hidden}
+.till{width:100%;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;min-height:150px;padding:12px}
+.ttit2{font-size:14px;font-weight:900;color:var(--w);text-align:center}
+.tdesc{font-size:11px;color:var(--tm);text-align:center;line-height:1.7}
+.dots{display:flex;gap:5px;justify-content:center}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--ch3)}
+.dot.on{border-radius:3px}
+.tfoot{padding:12px 16px;flex-shrink:0}
+
+/* ── PAUSE OVERLAY ── */
+.pov{background:rgba(8,8,15,.88);backdrop-filter:blur(10px);align-items:center;justify-content:center}
+.pcard{background:var(--ch2);border-radius:22px;padding:24px 20px;width:248px;display:flex;flex-direction:column;align-items:center;gap:11px;border:1px solid rgba(255,255,255,.08);box-shadow:0 16px 48px rgba(0,0,0,.5)}
+.ptit{font-size:19px;font-weight:900;color:var(--w)}
+.pinf{display:flex;gap:16px;align-items:center}
+.pst .sl{font-size:9px;color:var(--td);font-weight:700;text-transform:uppercase;text-align:center}
+.pst .sv{font-size:17px;font-weight:900;text-align:center}
+.pvs{width:1px;height:32px;background:rgba(255,255,255,.07)}
+.pbtns{display:flex;flex-direction:column;gap:7px;width:100%}
+.pb{padding:11px;border-radius:10px;font-size:12px;font-weight:800;border:none;cursor:pointer;font-family:var(--f);width:100%}
+.pb.res{color:#0A0A0A}
+.pb.rst{background:rgba(255,255,255,.08);color:var(--w)}
+.pb.qt{background:transparent;color:var(--td);border:1px solid rgba(255,255,255,.08)}
+
+/* ── WIN / LOSE ── */
+.endsc{align-items:center;justify-content:center;padding:18px 20px;position:relative;overflow:hidden}
+.cft-row{position:absolute;top:0;left:0;right:0;height:80px;display:flex;justify-content:space-around;padding-top:6px;pointer-events:none}
+.cft{width:7px;height:7px;border-radius:2px;animation:cfall 2.5s ease-in infinite}
+@keyframes cfall{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(100px) rotate(400deg);opacity:0}}
+.end-ico{font-size:52px;margin-bottom:2px;position:relative}
+.end-tit{font-size:24px;font-weight:900;position:relative;margin-bottom:2px}
+.end-sub{font-size:11px;font-weight:700;position:relative;margin-bottom:10px}
+.scorebox{width:100%;border-radius:13px;padding:13px 18px;text-align:center;position:relative;margin-bottom:10px}
+.scorebox .pts{font-size:38px;font-weight:900;line-height:1}
+.scorebox .mx{font-size:14px;color:var(--tm)}
+.scorebox .lv{font-size:12px;font-weight:800;color:var(--w);margin-top:3px}
+.critlist{width:100%;display:flex;flex-direction:column;gap:5px;position:relative}
+.crow{display:flex;align-items:center;gap:7px}
+.clbl{font-size:10px;color:var(--tm);font-weight:600;flex:1}
+.cbw{width:68px;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+.cb{height:100%;border-radius:3px}
+.cpts{font-size:10px;font-weight:900;color:var(--w);width:24px;text-align:right}
+.endbtns{display:flex;flex-direction:column;gap:7px;width:100%;position:relative;margin-top:12px}
+
+/* lose specific */
+.losebox{width:100%;background:rgba(229,57,53,.07);border:1px solid rgba(229,57,53,.14);border-radius:11px;padding:12px;margin-bottom:12px;position:relative}
+.losetit{font-size:9px;color:var(--td);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
+.loseitem{display:flex;align-items:flex-start;gap:7px;font-size:11px;color:var(--tm);font-weight:600;margin-bottom:5px;line-height:1.4}
+.dred{width:5px;height:5px;border-radius:50%;background:var(--re);flex-shrink:0;margin-top:3px}
+
+/* ── RESULTS PAGE ── */
+.ressc{align-items:center;padding:16px;overflow-y:auto;gap:9px}
+.rh .re2{font-size:40px;text-align:center}
+.rh .rt{font-size:19px;font-weight:900;text-align:center}
+.rh .rsub{font-size:10px;color:var(--td);text-align:center}
+.rglobal{width:100%;border-radius:12px;padding:12px;text-align:center}
+.gpts{font-size:36px;font-weight:900;line-height:1}
+.glv{font-size:11px;font-weight:800;color:var(--w);margin-top:3px}
+.sublist{width:100%;display:flex;flex-direction:column;gap:6px}
+.srow{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border-radius:8px;padding:8px 10px}
+.sico{font-size:17px}
+.sinf{flex:1}
+.snm{font-size:10px;font-weight:800;color:var(--w)}
+.sbw{height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:3px;overflow:hidden}
+.sbar{height:100%;border-radius:2px}
+.ssc{font-size:13px;font-weight:900}
+.interp{width:100%;background:rgba(255,255,255,.03);border-radius:10px;padding:10px 12px}
+.itit{font-size:9px;font-weight:700;color:var(--td);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.itxt{font-size:11px;color:var(--tm);line-height:1.65}
+
+/* ─────────────────────────────────
+   PATHMIND  (mini-metro style)
+───────────────────────────────── */
+.pm-bg{background:linear-gradient(160deg,#12141E 0%,#0C0E18 100%)}
+
+.metro-wrap{flex:1;position:relative;overflow:hidden}
+.m-grid{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.035) 1px,transparent 1px);background-size:28px 28px}
+/* SVG overlay for lines */
+.m-svg{position:absolute;inset:0;width:100%;height:100%}
+/* stations */
+.sta{position:absolute;transform:translate(-50%,-50%);cursor:pointer;z-index:10;display:flex;flex-direction:column;align-items:center}
+.stc{border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;border:2.5px solid transparent;transition:all .2s}
+.stc.s-start{width:28px;height:28px;background:#4CAF50;border-color:#4CAF50;box-shadow:0 0 14px rgba(76,175,80,.5)}
+.stc.s-end{width:28px;height:28px;background:var(--or);border-color:var(--or);box-shadow:0 0 14px rgba(245,166,35,.5)}
+.stc.s-nor{width:22px;height:22px;background:#252840;border-color:#383C5A}
+.stc.s-path{width:22px;height:22px;background:rgba(91,141,239,.7);border-color:var(--bl);box-shadow:0 0 8px rgba(91,141,239,.35)}
+.stc.s-cost{width:22px;height:22px;background:rgba(229,57,53,.25);border-color:rgba(229,57,53,.5)}
+.stc.s-star{width:22px;height:22px;background:#252840;border-color:rgba(245,166,35,.45)}
+.sta-lbl{font-size:8px;font-weight:800;color:rgba(255,255,255,.55);margin-top:3px;white-space:nowrap}
+
+.pm-legend{display:flex;gap:9px;padding:5px 14px 3px;flex-shrink:0;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.05)}
+.pml{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--td);font-weight:700}
+.pmld{width:9px;height:9px;border-radius:50%}
+
+/* error flash */
+.err-flash{position:absolute;inset:0;background:rgba(229,57,53,.12);border:2px solid rgba(229,57,53,.3);border-radius:0;pointer-events:none;animation:eflash .6s ease-out;z-index:20}
+@keyframes eflash{0%{opacity:1}100%{opacity:0}}
+
+/* ─────────────────────────────────
+   DAYSTACK  (HRM style)
+───────────────────────────────── */
+.ds-bg{background:linear-gradient(160deg,#0D1A0A 0%,#080F06 100%)}
+
+.hrm{flex:1;display:flex;overflow:hidden}
+.hrm-in{width:136px;display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,.05);overflow-y:auto;flex-shrink:0}
+.hrm-prog{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.hrm-out{width:96px;display:flex;flex-direction:column;border-left:1px solid rgba(255,255,255,.05);flex-shrink:0}
+.hcol{font-size:8px;font-weight:800;color:var(--td);text-transform:uppercase;letter-spacing:1px;padding:6px 9px 4px;border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0}
+
+.titem{margin:3px 7px;border-radius:8px;padding:6px 8px;display:flex;align-items:center;gap:5px;cursor:grab;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.04);transition:all .14s}
+.titem:hover{background:rgba(255,255,255,.07)}
+.titem.tdep{border-color:rgba(245,166,35,.22);background:rgba(245,166,35,.05)}
+.titem.tprio{border-color:rgba(229,57,53,.22);background:rgba(229,57,53,.05)}
+.titem.tdone{opacity:.5;border-color:rgba(62,189,95,.2);background:rgba(62,189,95,.04)}
+.titem.terr{border-color:rgba(229,57,53,.5);background:rgba(229,57,53,.1)}
+.tico{font-size:15px;flex-shrink:0}
+.tinf{flex:1;min-width:0}
+.tnm{font-size:10px;font-weight:800;color:var(--w);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tmt{font-size:8px;color:var(--td);font-weight:600}
+.tbdg{font-size:8px;font-weight:800;padding:1px 5px;border-radius:7px;flex-shrink:0}
+.tbdep{background:rgba(245,166,35,.18);color:var(--or)}
+.tbprio{background:rgba(229,57,53,.18);color:var(--re)}
+.tbtime{background:rgba(91,141,239,.18);color:var(--bl)}
+.tbdone{background:rgba(62,189,95,.18);color:var(--gr)}
+
+.prg-area{flex:1;padding:5px 7px;overflow-y:auto;display:flex;flex-direction:column;gap:3px;position:relative}
+.hrml{display:flex;align-items:center;gap:5px;padding:5px 6px;border-radius:6px;min-height:30px;border:1px dashed rgba(255,255,255,.08);background:rgba(255,255,255,.02);transition:all .14s}
+.hrml:hover{background:rgba(255,255,255,.05)}
+.hrml.fld{background:rgba(62,189,95,.07);border:1px solid rgba(62,189,95,.18)}
+.hrml.act{background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.32);box-shadow:0 0 8px rgba(245,166,35,.12)}
+.hrml.err{background:rgba(229,57,53,.09);border:1px solid rgba(229,57,53,.28)}
+.hln{font-size:8px;color:var(--td);font-weight:700;width:13px;text-align:right;flex-shrink:0}
+.hlico{font-size:13px;flex-shrink:0}
+.hltxt{font-size:9px;font-weight:800;color:var(--w);flex:1}
+.hlarr{font-size:9px;color:var(--td)}
+.exec-line{position:absolute;left:0;right:0;height:2px;background:var(--or);box-shadow:0 0 8px rgba(245,166,35,.6);pointer-events:none;z-index:5}
+
+.osl{margin:3px 5px;border-radius:7px;padding:5px 6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);font-size:9px;color:var(--tm);display:flex;align-items:center;gap:4px}
+.osl.ok{background:rgba(62,189,95,.09);border-color:rgba(62,189,95,.22);color:var(--gr)}
+.osl.er{background:rgba(229,57,53,.09);border-color:rgba(229,57,53,.22);color:var(--re)}
+
+/* ─────────────────────────────────
+   THINKFIRST  (Tower of Hanoi)
+───────────────────────────────── */
+.tf-bg{background:linear-gradient(160deg,#0A0C18 0%,#060810 100%)}
+
+.tw-area{flex:1;display:flex;align-items:flex-end;justify-content:space-around;padding:14px 12px 8px;gap:4px;position:relative}
+.tw-hint{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:rgba(91,141,239,.1);border:1px solid rgba(91,141,239,.18);border-radius:7px;padding:3px 9px;font-size:8px;color:var(--bl);font-weight:800;white-space:nowrap}
+.tc{display:flex;flex-direction:column;align-items:center;flex:1;cursor:pointer}
+.tc:hover .tbase{background:rgba(91,141,239,.18)}
+.tdc{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:92px;justify-content:flex-end}
+.disc{height:18px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:var(--w);transition:all .25s}
+.d1{background:linear-gradient(135deg,#4CAF50,#2E7D32)}
+.d2{background:linear-gradient(135deg,var(--or),var(--or2))}
+.d3{background:linear-gradient(135deg,var(--re),var(--re2))}
+.d4{background:linear-gradient(135deg,var(--bl),var(--bl2))}
+.disc.sel{box-shadow:0 0 0 2.5px var(--w),0 0 14px rgba(91,141,239,.5);transform:translateY(-4px)}
+.disc.err-disc{box-shadow:0 0 0 2.5px var(--re),0 0 14px rgba(229,57,53,.5)}
+.tpole{width:3.5px;height:92px;background:rgba(255,255,255,.1);border-radius:2px;margin-top:-96px}
+.tbase{width:104px;height:5px;background:rgba(255,255,255,.08);border-radius:3px;transition:background .2s}
+.tlbl{font-size:8px;font-weight:800;color:var(--td);text-transform:uppercase;letter-spacing:.8px;margin-top:5px}
+
+.seq-s{padding:6px 12px;border-top:1px solid rgba(255,255,255,.05);flex-shrink:0}
+.seqtit{font-size:8px;color:var(--td);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.seq-row{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px}
+.scard{min-width:46px;height:46px;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;flex-shrink:0;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+.scard.fld{background:rgba(91,141,239,.1);border-color:rgba(91,141,239,.26)}
+.scard.act{background:rgba(245,166,35,.12);border-color:rgba(245,166,35,.38);box-shadow:0 0 8px rgba(245,166,35,.18)}
+.scard.errc{background:rgba(229,57,53,.1);border-color:rgba(229,57,53,.28)}
+.scard.add{border:1px dashed rgba(255,255,255,.12);background:transparent}
+.sn{font-size:7px;color:var(--td);font-weight:700}
+.sm{font-size:12px}
+.sd{font-size:7px;color:var(--td);font-weight:700}
+
+/* ─── DESKTOP ─── */
+.fd .home{flex-direction:row;justify-content:space-evenly}
+.fd .home .btns{max-width:196px}
+.fd .home .gdesc{margin-bottom:0}
+/* pm desktop */
+.fd .pm-game-wrap{flex-direction:row}
+.fd .pm-game-wrap .pm-legend{flex-direction:column;width:110px;border-left:1px solid rgba(255,255,255,.05);border-top:none;padding:10px 8px;gap:8px;justify-content:center}
+.fd .pm-game-wrap .gfoot{flex-direction:column;width:110px;border-left:1px solid rgba(255,255,255,.05);border-top:none;padding:8px;gap:7px}
+/* ds desktop */
+.fd .hrm-in{width:154px}
+.fd .hrm-out{width:110px}
+/* tf desktop */
+.fd .tf-game-wrap{flex-direction:row}
+.fd .tw-area{flex:1;padding:20px}
+.fd .seq-s{width:164px;border-top:none;border-left:1px solid rgba(255,255,255,.05);padding:10px}
+.fd .seq-row{flex-direction:column;height:100%;overflow-y:auto;overflow-x:hidden}
+
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="brand">🧠 Zennyt</span>
+  <div id="gnav" style="display:flex;gap:5px;flex-wrap:wrap">
+    <button class="gb g1 on" onclick="selG(1)">🗺️ PathMind</button>
+    <button class="gb g2" onclick="selG(2)">📅 DayStack</button>
+    <button class="gb g3" onclick="selG(3)">🗼 ThinkFirst</button>
+    <button class="gb g4" onclick="selG(4)">📊 Résultats</button>
+  </div>
+  <div class="nsep"></div>
+  <div id="snav" style="display:flex;gap:4px;flex-wrap:wrap">
+    <button class="sb on" onclick="selS('home')">🏠 Accueil</button>
+    <button class="sb" onclick="selS('t1')">📖 Tuto 1</button>
+    <button class="sb" onclick="selS('t2')">📖 Tuto 2</button>
+    <button class="sb" onclick="selS('gn')">🎮 Neutre</button>
+    <button class="sb" onclick="selS('ge')">⚠️ Erreur</button>
+    <button class="sb" onclick="selS('gs')">✅ Succès</button>
+    <button class="sb" onclick="selS('pause')">⏸ Pause</button>
+    <button class="sb" onclick="selS('win')">🏆 Réussite</button>
+    <button class="sb" onclick="selS('lose')">❌ Perte</button>
+  </div>
+</nav>
+
+<div class="stage">
+  <div class="slbl" id="slbl">PathMind · Accueil</div>
+  <div class="row">
+    <div class="dev"><div class="dlbl">📱 Mobile</div><div class="fm" id="fM"></div></div>
+    <div class="dev"><div class="dlbl">📱 Tablette</div><div class="ft" id="fT"></div></div>
+    <div class="dev"><div class="dlbl">🖥️ Desktop</div><div class="fd" id="fD"></div></div>
+  </div>
+</div>
+
+<script>
+let G=1, S='home';
+const gN={1:'PathMind',2:'DayStack',3:'ThinkFirst',4:'Résultats Globaux'};
+const sN={home:'Accueil',t1:'Tutoriel 1',t2:'Tutoriel 2',gn:'Gameplay Neutre',ge:'Gameplay Erreur',gs:'Gameplay Succès',pause:'Pause',win:'Résultats Réussite',lose:'Résultats Perte'};
+
+function selG(g){
+  G=g; if(g===4){S='res';}else if(S==='res'){S='home';}
+  document.querySelectorAll('#gnav .gb').forEach((b,i)=>b.classList.toggle('on',i===g-1));
+  document.getElementById('snav').style.display=g===4?'none':'flex';
+  render(); upd();
+}
+function selS(s){
+  S=s;
+  const ss=['home','t1','t2','gn','ge','gs','pause','win','lose'];
+  document.querySelectorAll('#snav .sb').forEach((b,i)=>b.classList.toggle('on',ss[i]===s));
+  render(); upd();
+}
+function upd(){
+  document.getElementById('slbl').textContent=G===4?'Résultats Globaux — Profil de Planification':`${gN[G]} · ${sN[S]||S}`;
+}
+function render(){
+  const h=G===4?resHTML():G===1?pm(S):G===2?ds(S):tf(S);
+  ['fM','fT','fD'].forEach(id=>document.getElementById(id).innerHTML=h);
+}
+
+/* ══════════════ LOGOS ══════════════ */
+function logoPath(sz=68){return`<svg width="${sz}" height="${sz}" viewBox="0 0 68 68"><circle cx="18" cy="18" r="3" fill="#fff" opacity=".38"/><circle cx="34" cy="18" r="3" fill="#fff" opacity=".38"/><circle cx="50" cy="18" r="3" fill="#fff" opacity=".38"/><circle cx="18" cy="34" r="3" fill="#fff" opacity=".38"/><circle cx="34" cy="34" r="3" fill="#fff" opacity=".38"/><circle cx="50" cy="34" r="3" fill="#fff" opacity=".38"/><circle cx="18" cy="50" r="3" fill="#fff" opacity=".38"/><circle cx="34" cy="50" r="3" fill="#fff" opacity=".38"/><circle cx="50" cy="50" r="3" fill="#fff" opacity=".38"/><polyline points="18,18 34,18 34,34 50,34 50,50" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18" cy="18" r="6.5" fill="#1A0800"/><circle cx="18" cy="18" r="3.5" fill="#fff"/><circle cx="50" cy="50" r="6.5" fill="#1A0800"/><rect x="53" y="44" width="7" height="4.5" rx=".9" fill="#fff"/><rect x="53" y="42.5" width="1.8" height="9" rx=".9" fill="#fff"/></svg>`;}
+function logoDay(sz=68){return`<svg width="${sz}" height="${sz}" viewBox="0 0 68 68"><circle cx="34" cy="34" r="26" fill="none" stroke="#fff" stroke-width="2" opacity=".32"/><line x1="34" y1="9" x2="34" y2="14" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".38"/><line x1="59" y1="34" x2="54" y2="34" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".38"/><line x1="34" y1="59" x2="34" y2="54" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".38"/><line x1="9" y1="34" x2="14" y2="34" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".38"/><line x1="34" y1="34" x2="34" y2="15" stroke="#fff" stroke-width="3" stroke-linecap="round"/><line x1="34" y1="34" x2="47" y2="41" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><circle cx="34" cy="34" r="3" fill="#fff"/><rect x="10" y="26" width="15" height="3.5" rx="1.75" fill="#fff" opacity=".7"/><rect x="10" y="32" width="10" height="3.5" rx="1.75" fill="#fff" opacity=".5"/><rect x="10" y="38" width="13" height="3.5" rx="1.75" fill="#fff" opacity=".62"/><circle cx="50" cy="17" r="8" fill="#217A3A"/><polyline points="46,17 50,21 56,13" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>`;}
+function logoTF(sz=68){return`<svg width="${sz}" height="${sz}" viewBox="0 0 68 68"><rect x="7" y="58" width="54" height="4.5" rx="2.25" fill="#fff" opacity=".28"/><rect x="16" y="25" width="3" height="33" rx="1.5" fill="#fff" opacity=".18"/><rect x="32.5" y="25" width="3" height="33" rx="1.5" fill="#fff" opacity=".18"/><rect x="49" y="25" width="3" height="33" rx="1.5" fill="#fff" opacity=".18"/><rect x="5" y="52" width="28" height="6.5" rx="3.25" fill="#E53935"/><rect x="8" y="45.5" width="22" height="6.5" rx="3.25" fill="#F5A623"/><rect x="11" y="39" width="16" height="6.5" rx="3.25" fill="#4CAF50"/><rect x="35" y="52" width="28" height="6.5" rx="3.25" fill="#E53935" opacity=".2"/><rect x="38" y="45.5" width="22" height="6.5" rx="3.25" fill="#F5A623" opacity=".2"/><rect x="41" y="39" width="16" height="6.5" rx="3.25" fill="#4CAF50" opacity=".2"/><path d="M17 23 Q34 9 51 23" fill="none" stroke="#fff" stroke-width="1.9" stroke-dasharray="4,3" stroke-linecap="round" marker-end="url(#atf3)"/><defs><marker id="atf3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs><circle cx="54" cy="17" r="8.5" fill="#060A18" stroke="#fff" stroke-width="1.2" opacity=".55"/><circle cx="54" cy="15" r="3.2" fill="none" stroke="#fff" stroke-width="1.1" opacity=".75"/><line x1="52" y1="18.5" x2="56" y2="18.5" stroke="#fff" stroke-width="1.1" stroke-linecap="round" opacity=".75"/><line x1="53" y1="20.5" x2="55" y2="20.5" stroke="#fff" stroke-width="1.1" stroke-linecap="round" opacity=".75"/></svg>`;}
+
+/* ══════════════════════════════════════════
+   SHARED HELPERS
+══════════════════════════════════════════ */
+function confetti(colors){return`<div class="cft-row">${[...Array(9)].map((_,i)=>`<div class="cft" style="background:${colors[i%colors.length]};animation-delay:${i*.26}s;animation-duration:${2+i*.15}s"></div>`).join('')}</div>`;}
+
+function pauseCard(logo,c1,c2,stat1lbl,stat1val,stat2lbl,stat2val){return`
+<div class="sc pov on">
+  <div class="pcard">
+    <div style="width:50px;height:50px;border-radius:13px;background:${c1};display:flex;align-items:center;justify-content:center">${logo}</div>
+    <div class="ptit">Pause</div>
+    <div class="pinf">
+      <div class="pst"><div class="sl">${stat1lbl}</div><div class="sv" style="color:${c2}">${stat1val}</div></div>
+      <div class="pvs"></div>
+      <div class="pst"><div class="sl">${stat2lbl}</div><div class="sv">${stat2val}</div></div>
+    </div>
+    <div class="pbtns">
+      <button class="pb res" style="background:linear-gradient(135deg,${c2},${c1})">▶ Reprendre</button>
+      <button class="pb rst">↺ Recommencer</button>
+      <button class="pb qt">✕ Quitter</button>
+    </div>
+  </div>
+</div>`;}
+
+/* ══════════════════════════════════════════
+   PATHMIND
+   Scénario : Leila, 34 ans, chercheuse.
+   Doit trouver le chemin optimal entre
+   le labo (départ) et la salle de réunion
+   (arrivée) dans un bâtiment stylisé,
+   en évitant les zones "travaux" (rouges)
+   et en ramassant des "dossiers" (étoiles).
+══════════════════════════════════════════ */
+function pm(s){
+  if(s==='home')return pmHome();
+  if(s==='t1')return pmT(0);
+  if(s==='t2')return pmT(1);
+  if(s==='gn')return pmGame('n');
+  if(s==='ge')return pmGame('e');
+  if(s==='gs')return pmGame('s');
+  if(s==='pause')return pauseCard(`<div style="width:40px;height:40px;border-radius:50%;background:var(--or);display:flex;align-items:center;justify-content:center">${logoPath(28)}</div>`,'#251840','#F5A623','Temps','3:12','Essais','1/3');
+  if(s==='win')return pmEnd(true);
+  if(s==='lose')return pmEnd(false);
+  return pmHome();
+}
+
+function pmHome(){return`
+<div class="sc home pm-bg on">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 65% 45% at 50% 20%,rgba(245,166,35,.13) 0%,transparent 68%)"></div>
+  <div class="lc" style="background:#201440;box-shadow:0 0 0 1px #3A2060,0 8px 28px rgba(245,166,35,.2)">${logoPath(68)}</div>
+  <div class="gtit">PathMind</div>
+  <div class="gsub" style="color:var(--or)">Spatial Planning</div>
+  <div class="gdesc">Leila doit rejoindre la salle de réunion depuis son laboratoire. Trace le chemin le plus court en évitant les travaux et récupère les dossiers en route.</div>
+  <div class="btns">
+    <button class="btnP" style="background:linear-gradient(135deg,var(--or),var(--or2));box-shadow:0 4px 18px rgba(245,166,35,.32)">▶ Jouer</button>
+    <button class="btnO">📖 Tutoriel</button>
+  </div>
+  <div class="sbadge"><div><div class="sl">Meilleur score</div><div class="sv" style="color:var(--or)">8/10</div></div><div style="margin-left:auto;font-size:22px">🥇</div></div>
+</div>`;}
+
+function pmT(i){
+  const steps=[
+    {title:'Connecte les stations',desc:'Leila se déplace de station en station. Touche chaque station pour tracer sa ligne de trajet. Va du labo 🟢 jusqu\'à la salle de réunion 🟡 en suivant les couloirs.',
+    illus:`<div style="display:flex;flex-direction:column;gap:10px;padding:14px;width:100%">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:28px;height:28px;border-radius:50%;background:#4CAF50;border:2.5px solid #4CAF50;box-shadow:0 0 12px rgba(76,175,80,.5);display:flex;align-items:center;justify-content:center;font-size:8px;color:#fff;font-weight:900">LAB</div>
+        <div style="flex:1;height:3.5px;background:linear-gradient(90deg,rgba(91,141,239,.8),rgba(91,141,239,.3));border-radius:2px;position:relative"><div style="position:absolute;right:0;top:-3px;font-size:10px">▶</div></div>
+        <div style="width:22px;height:22px;border-radius:50%;background:rgba(91,141,239,.7);border:2.5px solid var(--bl)"></div>
+        <div style="flex:1;height:3.5px;background:rgba(91,141,239,.4);border-radius:2px"></div>
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--or);border:2.5px solid var(--or);box-shadow:0 0 12px rgba(245,166,35,.5);display:flex;align-items:center;justify-content:center;font-size:7px;color:#fff;font-weight:900">RÉUN</div>
+      </div>
+      <div style="font-size:10px;color:var(--td);font-weight:700;text-align:center">👆 Touche les stations pour tracer la ligne</div>
+      <div style="display:flex;gap:8px;font-size:10px;color:var(--tm);font-weight:700;justify-content:center">
+        <span>3 essais max</span><span>·</span><span>Score selon longueur</span>
+      </div>
+    </div>`},
+    {title:'Zones à éviter & étoiles',desc:'Les zones rouges ⚡ sont des couloirs en travaux — chaque passage coûte des points. Les étoiles ⭐ sont des dossiers à récupérer pour Leila : elles donnent des points bonus.',
+    illus:`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:12px">
+      ${[
+        ['#252840','#383C5A',''],['rgba(229,57,53,.25)','rgba(229,57,53,.5)','⚡'],
+        ['rgba(229,57,53,.25)','rgba(229,57,53,.5)','⚡'],['#252840','rgba(245,166,35,.4)','⭐'],
+        ['rgba(91,141,239,.7)','var(--bl)',''],['rgba(91,141,239,.7)','var(--bl)',''],
+        ['#252840','#383C5A',''],['#252840','#383C5A',''],
+      ].map(([bg,bc,ic])=>`<div style="height:34px;border-radius:6px;background:${bg};border:1.5px solid ${bc};display:flex;align-items:center;justify-content:center;font-size:14px">${ic}</div>`).join('')}
+      <div style="grid-column:span 4;display:flex;gap:10px;margin-top:4px;font-size:9px;color:var(--td);font-weight:700;justify-content:center">
+        <span style="color:rgba(229,57,53,.8)">⚡ Travaux = −pts</span>
+        <span>·</span><span style="color:rgba(245,166,35,.8)">⭐ Dossier = +pt</span>
+        <span>·</span><span style="color:var(--bl)">Chemin actif</span>
+      </div>
+    </div>`}
+  ];
+  const st=steps[i];
+  return`
+<div class="sc tsc on">
+  <div class="thdr"><div class="ttit">🗺️ PathMind — Comment jouer</div><div class="tskip">Passer</div></div>
+  <div class="tbdy">
+    <div class="till">${st.illus}</div>
+    <div class="ttit2">${st.title}</div>
+    <div class="tdesc">${st.desc}</div>
+    <div class="dots"><div class="dot${i===0?' on':''}" style="${i===0?'background:var(--or)':''}"></div><div class="dot${i===1?' on':''}" style="${i===1?'background:var(--or)':''}"></div></div>
+  </div>
+  <div class="tfoot"><button class="btnP" style="background:linear-gradient(135deg,var(--or),var(--or2))">${i===0?'Suivant →':'Commencer ▶'}</button></div>
+</div>`;}
+
+function pmGame(state){
+  // Stations layout for a "building corridor" feel
+  // state n=neutre (partial), e=erreur (red zone touched), s=succès (full path traced)
+  const sta=[
+    {x:52,y:75,t:'s-start',lbl:'🔬 Labo'},
+    {x:52,y:155,t:'s-nor',lbl:'Couloir A'},
+    {x:130,y:155,t:'s-cost',lbl:'⚡ Travaux'},
+    {x:210,y:155,t:'s-nor',lbl:'Couloir B'},
+    {x:210,y:240,t:'s-star',lbl:'⭐ Dossier'},
+    {x:130,y:240,t:'s-nor',lbl:'Hall'},
+    {x:52,y:310,t:'s-cost',lbl:'⚡ Travaux'},
+    {x:210,y:310,t:'s-nor',lbl:'Couloir C'},
+    {x:210,y:390,t:'s-end',lbl:'📋 Réunion'},
+  ];
+
+  // Which stations are "on path" per state
+  const pathN=[0,1]; // neutre = juste commencé, 2 stations reliées
+  const pathE=[0,1,2,3]; // erreur = passé par zone travaux (index 2)
+  const pathS=[0,1,5,4,7,8]; // succès = chemin optimal sans travaux + étoile
+  const pathMap={n:pathN,e:pathE,s:pathS};
+  const pth=pathMap[state];
+
+  // Lines between consecutive path stations
+  function lineSVG(a,b,color,dash=false){
+    const dx=b.x-a.x,dy=b.y-a.y;
+    return`<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="${color}" stroke-width="4" stroke-linecap="round"${dash?' stroke-dasharray="6,4"':''} opacity="${state==='s'?'.9':'.7'}"/>`;
+  }
+
+  let svgLines='';
+  for(let i=0;i<pth.length-1;i++){
+    const a=sta[pth[i]],b=sta[pth[i+1]];
+    const col=state==='e'&&pth[i]===2||state==='e'&&pth[i+1]===2?'rgba(229,57,53,.8)':state==='s'?'rgba(91,141,239,.85)':'rgba(91,141,239,.65)';
+    svgLines+=lineSVG(a,b,col);
+  }
+
+  let stHTML='';
+  sta.forEach((s,i)=>{
+    const onPath=pth.includes(i);
+    let cls=s.t;
+    if(onPath&&s.t==='s-nor'){cls='s-path';}
+    if(state==='e'&&s.t==='s-cost'&&onPath){cls='s-cost';} // keep red
+    stHTML+=`<div class="sta" style="left:${s.x}px;top:${s.y}px">
+      <div class="stc ${cls}" style="width:${cls==='s-start'||cls==='s-end'?28:22}px;height:${cls==='s-start'||cls==='s-end'?28:22}px">
+        ${s.t==='s-cost'?'⚡':s.t==='s-star'?'⭐':''}
+      </div>
+      <div class="sta-lbl">${s.lbl}</div>
+    </div>`;
+  });
+
+  const hudTimeColor=state==='e'?'var(--re)':state==='s'?'var(--gr)':'var(--or)';
+  const hudScore=state==='n'?'—':state==='e'?'4/10':'8/10';
+  const hudTries=state==='n'?'0/3':state==='e'?'2/3':'1/3';
+
+  const bottomMsg=state==='n'
+    ?`<div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.22);border-radius:9px;padding:6px 12px;font-size:9px;color:var(--or);font-weight:700;white-space:nowrap">👆 Continue à tracer la ligne vers la salle de réunion</div>`
+    :state==='e'
+    ?`<div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(229,57,53,.1);border:1px solid rgba(229,57,53,.25);border-radius:9px;padding:6px 12px;font-size:9px;color:var(--re);font-weight:700;white-space:nowrap">⚠️ Zone travaux traversée — −2 pts</div>`
+    :`<div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(62,189,95,.1);border:1px solid rgba(62,189,95,.22);border-radius:9px;padding:6px 12px;font-size:9px;color:var(--gr);font-weight:700;white-space:nowrap">✓ Chemin tracé — Valide pour un score estimé : 8/10</div>`;
+
+  const errFlash=state==='e'?'<div class="err-flash"></div>':'';
+
+  return`
+<div class="sc pm-game-wrap pm-bg on" style="flex-direction:column">
+  <div class="hud">
+    <div class="hi"><div class="hl">Temps</div><div class="hv" style="color:${hudTimeColor}">${state==='n'?'4:22':state==='e'?'3:08':'2:44'}</div></div>
+    <div class="hsep"></div>
+    <div class="hi"><div class="hl">Score estimé</div><div class="hv">${hudScore}</div></div>
+    <div class="hsep"></div>
+    <div class="hi"><div class="hl">Essais</div><div class="hv" style="color:${hudTries==='0/3'?'var(--gr)':'var(--or)'}">${hudTries}</div></div>
+    <div class="hsep"></div>
+    <div style="font-size:17px;cursor:pointer">⏸</div>
+  </div>
+  <div class="metro-wrap">
+    <div class="m-grid"></div>
+    <svg class="m-svg" viewBox="0 0 280 460" preserveAspectRatio="xMidYMid meet">${svgLines}</svg>
+    ${stHTML}
+    ${errFlash}
+    ${bottomMsg}
+  </div>
+  <div class="pm-legend">
+    <div class="pml"><div class="pmld" style="background:#4CAF50"></div>Départ</div>
+    <div class="pml"><div class="pmld" style="background:var(--or)"></div>Arrivée</div>
+    <div class="pml"><div class="pmld" style="background:rgba(229,57,53,.3);border:1.5px solid rgba(229,57,53,.5)"></div>⚡ Travaux</div>
+    <div class="pml"><div class="pmld" style="background:#252840;border:1.5px solid rgba(245,166,35,.4)"></div>⭐ Dossier</div>
+    <div class="pml"><div class="pmld" style="background:rgba(91,141,239,.7)"></div>Chemin</div>
+  </div>
+  <div class="gfoot">
+    <button class="bc clr">🗑 Effacer</button>
+    <button class="bc val" style="background:linear-gradient(135deg,${state==='s'?'var(--or),var(--or2)':'rgba(255,255,255,.1),rgba(255,255,255,.06)'});color:${state==='s'?'var(--ch)':'var(--td)'}">✓ Valider</button>
+  </div>
+</div>`;}
+
+function pmEnd(win){
+  if(win){return`
+<div class="sc endsc on" style="background:linear-gradient(160deg,#1A1230 0%,#0E0A1C 100%)">
+  ${confetti(['#F5A623','#fff','#4CAF50','#5B8DEF'])}
+  <div class="end-ico">🏆</div>
+  <div class="end-tit">Chemin optimal !</div>
+  <div class="end-sub" style="color:var(--or)">Leila rejoint la réunion en un temps record</div>
+  <div class="scorebox" style="background:rgba(245,166,35,.09);border:1px solid rgba(245,166,35,.22)">
+    <div class="pts" style="color:var(--or)">8<span class="mx">/10</span></div>
+    <div class="lv">🥇 Bon à excellent</div>
+  </div>
+  <div class="critlist">
+    <div class="crow"><div class="clbl">Chemin optimal ±10%</div><div class="cbw"><div class="cb" style="width:100%;background:var(--or)"></div></div><div class="cpts">4/4</div></div>
+    <div class="crow"><div class="clbl">Essais utilisés (1 essai)</div><div class="cbw"><div class="cb" style="width:100%;background:var(--or)"></div></div><div class="cpts">3/3</div></div>
+    <div class="crow"><div class="clbl">Zones travaux évitées</div><div class="cbw"><div class="cb" style="width:100%;background:var(--gr)"></div></div><div class="cpts">2/2</div></div>
+    <div class="crow"><div class="clbl">Dossiers récupérés (⭐)</div><div class="cbw"><div class="cb" style="width:0%;background:var(--or)"></div></div><div class="cpts">0/1</div></div>
+  </div>
+  <div class="endbtns">
+    <button class="btnP" style="background:linear-gradient(135deg,var(--or),var(--or2))">Jeu suivant →</button>
+    <button class="btnO">↺ Rejouer</button>
+  </div>
+</div>`;}
+  return`
+<div class="sc endsc on" style="background:linear-gradient(160deg,#1A1230 0%,#0E0A1C 100%)">
+  <div class="end-ico">⏱️</div>
+  <div class="end-tit" style="color:var(--re)">Chemin non optimal</div>
+  <div class="end-sub" style="color:var(--tm)">Leila a emprunté des couloirs en travaux</div>
+  <div class="losebox">
+    <div class="losetit">Ce qui n'a pas fonctionné</div>
+    <div class="loseitem"><div class="dred"></div>2 zones "travaux" traversées (−4 pts)</div>
+    <div class="loseitem"><div class="dred"></div>Chemin 30% plus long que l'optimal</div>
+    <div class="loseitem"><div class="dred"></div>3 essais utilisés sans trouver le bon chemin</div>
+  </div>
+  <div class="scorebox" style="background:rgba(229,57,53,.07);border:1px solid rgba(229,57,53,.16)">
+    <div class="pts" style="color:var(--re)">3<span class="mx">/10</span></div>
+    <div class="lv" style="color:var(--tm)">Très faible — planification à renforcer</div>
+  </div>
+  <div class="endbtns">
+    <button class="btnP" style="background:linear-gradient(135deg,var(--re),var(--re2))">↺ Réessayer</button>
+    <button class="btnO">← Accueil</button>
+  </div>
+</div>`;}
+
+/* ══════════════════════════════════════════
+   DAYSTACK
+   Scénario : Marc, 58 ans, retraité.
+   Journée chargée : médecin, courses,
+   repas, courrier urgent, appel fils,
+   sport. Dépendances & horaires réels.
+══════════════════════════════════════════ */
+function ds(s){
+  if(s==='home')return dsHome();
+  if(s==='t1')return dsT(0);
+  if(s==='t2')return dsT(1);
+  if(s==='gn')return dsGame('n');
+  if(s==='ge')return dsGame('e');
+  if(s==='gs')return dsGame('s');
+  if(s==='pause')return pauseCard(`<div style="width:40px;height:40px;border-radius:50%;background:var(--gr);display:flex;align-items:center;justify-content:center">${logoDay(28)}</div>`,'#0A1F0A','#3EBD5F','Temps','8:44','Placées','4/7');
+  if(s==='win')return dsEnd(true);
+  if(s==='lose')return dsEnd(false);
+  return dsHome();
+}
+function dsHome(){return`
+<div class="sc home ds-bg on">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 65% 45% at 50% 20%,rgba(62,189,95,.11) 0%,transparent 68%)"></div>
+  <div class="lc" style="background:#061A08;box-shadow:0 0 0 1px #0F3014,0 8px 28px rgba(62,189,95,.18)">
+    <div style="width:68px;height:68px;border-radius:50%;background:var(--gr);display:flex;align-items:center;justify-content:center">${logoDay(50)}</div>
+  </div>
+  <div class="gtit">DayStack</div>
+  <div class="gsub" style="color:var(--gr)">Task Scheduling</div>
+  <div class="gdesc">Marc a une journée chargée. Aide-le à organiser ses 7 tâches dans le bon ordre en respectant les horaires, les dépendances et les priorités médicales.</div>
+  <div class="btns">
+    <button class="btnP" style="background:linear-gradient(135deg,var(--gr),var(--gr2));box-shadow:0 4px 18px rgba(62,189,95,.28)">▶ Jouer</button>
+    <button class="btnO">📖 Tutoriel</button>
+  </div>
+  <div class="sbadge"><div><div class="sl">Meilleur score</div><div class="sv" style="color:var(--gr)">7/10</div></div><div style="margin-left:auto;font-size:22px">🥈</div></div>
+</div>`;}
+
+function dsT(i){
+  const steps=[
+    {title:'Programme la journée de Marc',desc:'Marc ne peut cuisiner qu\'après avoir fait les courses. Le médecin ferme à 12h. Glisse chaque tâche dans l\'ordre logique — comme écrire un programme d\'instructions étape par étape.',
+    illus:`<div style="display:flex;flex-direction:column;gap:6px;padding:12px;width:100%">
+      <div style="font-size:9px;color:var(--td);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px">Exemple de dépendance :</div>
+      <div style="display:flex;align-items:center;gap:6px;background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.2);border-radius:8px;padding:6px 9px">
+        <div style="font-size:14px">🛒</div>
+        <div><div style="font-size:10px;font-weight:800;color:#fff">Faire les courses</div><div style="font-size:8px;color:var(--td)">9h–12h · priorité ❗</div></div>
+        <div style="margin-left:auto;font-size:8px;background:rgba(245,166,35,.18);color:var(--or);padding:2px 5px;border-radius:5px;font-weight:800">AVANT</div>
+      </div>
+      <div style="text-align:center;font-size:16px;color:var(--or)">↓</div>
+      <div style="display:flex;align-items:center;gap:6px;background:rgba(62,189,95,.08);border:1px solid rgba(62,189,95,.2);border-radius:8px;padding:6px 9px">
+        <div style="font-size:14px">🍳</div>
+        <div><div style="font-size:10px;font-weight:800;color:#fff">Préparer le déjeuner</div><div style="font-size:8px;color:var(--td)">après courses · 30min</div></div>
+        <div style="margin-left:auto;font-size:8px;background:rgba(62,189,95,.18);color:var(--gr);padding:2px 5px;border-radius:5px;font-weight:800">APRÈS</div>
+      </div>
+    </div>`},
+    {title:'Le curseur d\'exécution',desc:'Une fois le programme construit, clique "Exécuter". Le curseur descend ligne par ligne. Les tâches valides passent en vert dans la colonne résultats. Les erreurs (mauvais ordre, horaire dépassé) apparaissent en rouge.',
+    illus:`<div style="display:flex;flex-direction:column;gap:4px;padding:12px;width:100%">
+      ${[
+        {ico:'💊',txt:'Médicaments 8h',cls:'fld',arr:'✅'},
+        {ico:'🏥',txt:'Médecin 9h',cls:'act',arr:'▶'},
+        {ico:'🛒',txt:'Courses 10h',cls:'',arr:''},
+        {ico:'🍳',txt:'Déjeuner...',cls:'',arr:''},
+      ].map(r=>`<div style="display:flex;align-items:center;gap:5px;padding:5px 7px;border-radius:6px;${r.cls==='fld'?'background:rgba(62,189,95,.08);border:1px solid rgba(62,189,95,.18)':r.cls==='act'?'background:rgba(245,166,35,.09);border:1px solid rgba(245,166,35,.32);box-shadow:0 0 8px rgba(245,166,35,.12)':'background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.09)'}">
+        <div style="font-size:8px;color:var(--td);width:12px;font-weight:700">·</div>
+        <div style="font-size:13px">${r.ico}</div>
+        <div style="font-size:9px;font-weight:800;color:#fff;flex:1">${r.txt}</div>
+        <div style="font-size:10px;color:${r.arr==='✅'?'var(--gr)':r.arr==='▶'?'var(--or)':'var(--td)'}">${r.arr}</div>
+      </div>`).join('')}
+      <div style="font-size:9px;color:var(--td);text-align:center;margin-top:4px">Le curseur orange ▶ indique la tâche en cours d'exécution</div>
+    </div>`}
+  ];
+  const st=steps[i];
+  return`
+<div class="sc tsc on">
+  <div class="thdr"><div class="ttit">📅 DayStack — Comment jouer</div><div class="tskip">Passer</div></div>
+  <div class="tbdy">
+    <div class="till">${st.illus}</div>
+    <div class="ttit2">${st.title}</div>
+    <div class="tdesc">${st.desc}</div>
+    <div class="dots"><div class="dot${i===0?' on':''}" style="${i===0?'background:var(--gr)':''}"></div><div class="dot${i===1?' on':''}" style="${i===1?'background:var(--gr)':''}"></div></div>
+  </div>
+  <div class="tfoot"><button class="btnP" style="background:linear-gradient(135deg,var(--gr),var(--gr2))">${i===0?'Suivant →':'Commencer ▶'}</button></div>
+</div>`;}
+
+function dsGame(state){
+  const allTasks=[
+    {ico:'💊',nm:'Médicaments',mt:'5min · 8h OBLIGATOIRE',t:'tprio',b:'tbprio',bt:'❗',done:true},
+    {ico:'🏥',nm:'Médecin (fermé à 12h)',mt:'30min · 9h–12h seulement',t:'tdep',b:'tbtime',bt:'⏰',done:state==='s'},
+    {ico:'🛒',nm:'Faire les courses',mt:'45min · 9h–12h',t:'tprio',b:'tbprio',bt:'❗',done:state!=='n'},
+    {ico:'🍳',nm:'Préparer déjeuner',mt:'30min · après courses',t:'tdep',b:'tbdep',bt:'→',done:state==='s'},
+    {ico:'📬',nm:'Courrier urgent',mt:'15min · avant 12h',t:'tprio',b:'tbprio',bt:'❗',done:false},
+    {ico:'📞',nm:'Appel fils',mt:'20min · après 14h',t:'',b:'',bt:'',done:false},
+    {ico:'🏃',nm:'Marche sportive',mt:'40min · flexible',t:'',b:'',bt:'',done:false},
+  ];
+
+  // program lines
+  const progLines={
+    n:[
+      {ico:'💊',txt:'Médicaments à 8h00',cls:'fld',arr:''},
+      {ico:'🏥',txt:'Médecin à 9h00',cls:'fld',arr:''},
+      {ico:'',txt:'',cls:'',arr:''},
+      {ico:'',txt:'',cls:'',arr:''},
+      {ico:'',txt:'',cls:'',arr:''},
+      {ico:'',txt:'',cls:'',arr:''},
+      {ico:'',txt:'',cls:'',arr:''},
+    ],
+    e:[
+      {ico:'💊',txt:'Médicaments à 8h00',cls:'fld',arr:''},
+      {ico:'🍳',txt:'Déjeuner à 9h00',cls:'err',arr:'✗'}, // erreur : courses pas encore faites
+      {ico:'🛒',txt:'Courses à 9h45',cls:'fld',arr:''},
+      {ico:'🏥',txt:'Médecin à 10h30',cls:'fld',arr:''},
+      {ico:'📬',txt:'Courrier à 13h',cls:'err',arr:'✗'}, // erreur : ferme à 12h
+      {ico:'',txt:'',cls:'',arr:''},
+      {ico:'',txt:'',cls:'',arr:''},
+    ],
+    s:[
+      {ico:'💊',txt:'Médicaments à 8h00',cls:'fld',arr:''},
+      {ico:'🏥',txt:'Médecin à 9h00',cls:'fld',arr:''},
+      {ico:'🛒',txt:'Courses à 9h45',cls:'fld',arr:''},
+      {ico:'📬',txt:'Courrier à 11h',cls:'fld',arr:''},
+      {ico:'🍳',txt:'Déjeuner à 12h',cls:'fld',arr:''},
+      {ico:'📞',txt:'Appel fils à 14h',cls:'fld',arr:''},
+      {ico:'🏃',txt:'Marche à 15h',cls:'fld',arr:''},
+    ],
+  };
+  const prog=progLines[state];
+  const execPos={n:-5,e:32,s:148}[state];
+
+  // output column
+  const outputs={
+    n:[{ico:'💊',st:'ok',tx:'Médicaments ✓'},{ico:'🏥',st:'ok',tx:'Médecin ✓'},{ico:'',st:'',tx:'—'},{ico:'',st:'',tx:'—'},{ico:'',st:'',tx:'—'},{ico:'',st:'',tx:'—'},{ico:'',st:'',tx:'—'}],
+    e:[{ico:'💊',st:'ok',tx:'Médicaments ✓'},{ico:'🍳',st:'er',tx:'Dépendance ✗'},{ico:'🛒',st:'ok',tx:'Courses ✓'},{ico:'🏥',st:'ok',tx:'Médecin ✓'},{ico:'📬',st:'er',tx:'Fermé 12h ✗'},{ico:'',st:'',tx:'—'},{ico:'',st:'',tx:'—'}],
+    s:[{ico:'💊',st:'ok',tx:'Médicaments ✓'},{ico:'🏥',st:'ok',tx:'Médecin ✓'},{ico:'🛒',st:'ok',tx:'Courses ✓'},{ico:'📬',st:'ok',tx:'Courrier ✓'},{ico:'🍳',st:'ok',tx:'Déjeuner ✓'},{ico:'📞',st:'ok',tx:'Appel ✓'},{ico:'🏃',st:'ok',tx:'Marche ✓'}],
+  };
+
+  const erreurs=state==='e'?'2':state==='s'?'0':'0';
+  const temps=state==='n'?'13:20':state==='e'?'9:55':'7:30';
+
+  return`
+<div class="sc ds-bg on" style="flex-direction:column">
+  <div class="hud">
+    <div class="hi"><div class="hl">Temps</div><div class="hv" style="color:${state==='e'?'var(--re)':state==='s'?'var(--gr)':'var(--or)'}">${temps}</div></div>
+    <div class="hsep"></div>
+    <div class="hi"><div class="hl">Placées</div><div class="hv">${state==='n'?'2':state==='e'?'5':'7'}/7</div></div>
+    <div class="hsep"></div>
+    <div class="hi"><div class="hl">Erreurs</div><div class="hv" style="color:${erreurs!=='0'?'var(--re)':'var(--gr)'}">${erreurs}</div></div>
+    <div class="hsep"></div>
+    <div style="font-size:17px;cursor:pointer">⏸</div>
+  </div>
+  <div class="hrm">
+    <div class="hrm-in">
+      <div class="hcol">📥 Tâches de Marc</div>
+      ${allTasks.map(t=>`<div class="titem ${t.t} ${t.done?'tdone':''}">
+        <div class="tico">${t.ico}</div>
+        <div class="tinf"><div class="tnm">${t.nm}</div><div class="tmt">${t.mt}</div></div>
+        ${t.b?`<div class="tbdg ${t.b}">${t.bt}</div>`:''}
+      </div>`).join('')}
+    </div>
+    <div class="hrm-prog">
+      <div class="hcol">📋 Programme journalier</div>
+      <div class="prg-area">
+        ${state!=='n'?`<div class="exec-line" style="top:${execPos}px"></div>`:''}
+        ${prog.map((p,i)=>`<div class="hrml ${p.cls}">
+          <div class="hln">${i+1}</div>
+          <div class="hlico">${p.ico||'·'}</div>
+          <div class="hltxt">${p.txt||`<span style="color:var(--td)">Glisser une tâche…</span>`}</div>
+          ${p.arr?`<div class="hlarr" style="color:${p.arr==='✗'?'var(--re)':'var(--or)'}">${p.arr}</div>`:''}
+        </div>`).join('')}
+        ${state==='n'?`<div style="padding:8px;font-size:9px;color:var(--td);text-align:center;font-style:italic">↑ Fais glisser les tâches dans l'ordre logique</div>`:''}
+      </div>
+    </div>
+    <div class="hrm-out">
+      <div class="hcol">📤 Résultats</div>
+      ${outputs[state].map(o=>`<div class="osl ${o.st}">
+        <div>${o.ico}</div>
+        <div style="font-size:8px;font-weight:700">${o.tx}</div>
+      </div>`).join('')}
+    </div>
+  </div>
+  <div class="gfoot">
+    <button class="bc clr">🗑 Réinitialiser</button>
+    <button class="bc val" style="background:linear-gradient(135deg,${state==='s'?'var(--gr),var(--gr2)':'rgba(255,255,255,.09),rgba(255,255,255,.05)'});color:${state==='s'?'#041008':'var(--td)'}">
+      ${state==='s'?'✓ Valider score':'▶ Exécuter'}
+    </button>
+  </div>
+</div>`;}
+
+function dsEnd(win){
+  if(win){return`
+<div class="sc endsc on" style="background:linear-gradient(160deg,#0C180A 0%,#081008 100%)">
+  ${confetti(['#3EBD5F','#F5A623','#fff','#5B8DEF'])}
+  <div class="end-ico">📅</div>
+  <div class="end-tit">Journée réussie !</div>
+  <div class="end-sub" style="color:var(--gr)">Marc a tout géré dans l'ordre parfait</div>
+  <div class="scorebox" style="background:rgba(62,189,95,.08);border:1px solid rgba(62,189,95,.2)">
+    <div class="pts" style="color:var(--gr)">9<span class="mx">/10</span></div>
+    <div class="lv">🥇 Très bon</div>
+  </div>
+  <div class="critlist">
+    <div class="crow"><div class="clbl">Dépendances respectées</div><div class="cbw"><div class="cb" style="width:100%;background:var(--gr)"></div></div><div class="cpts">3/3</div></div>
+    <div class="crow"><div class="clbl">Contraintes horaires</div><div class="cbw"><div class="cb" style="width:100%;background:var(--gr)"></div></div><div class="cpts">3/3</div></div>
+    <div class="crow"><div class="clbl">Cohérence du planning</div><div class="cbw"><div class="cb" style="width:100%;background:var(--or)"></div></div><div class="cpts">2/2</div></div>
+    <div class="crow"><div class="clbl">Réajustements (&lt;2)</div><div class="cbw"><div class="cb" style="width:50%;background:var(--or)"></div></div><div class="cpts">1/2</div></div>
+  </div>
+  <div class="endbtns">
+    <button class="btnP" style="background:linear-gradient(135deg,var(--gr),var(--gr2))">Jeu suivant →</button>
+    <button class="btnO">↺ Rejouer</button>
+  </div>
+</div>`;}
+  return`
+<div class="sc endsc on" style="background:linear-gradient(160deg,#0C180A 0%,#081008 100%)">
+  <div class="end-ico">📋</div>
+  <div class="end-tit" style="color:var(--re)">Programme invalide</div>
+  <div class="end-sub" style="color:var(--tm)">Marc n'a pas pu tout faire dans les délais</div>
+  <div class="losebox">
+    <div class="losetit">Erreurs détectées</div>
+    <div class="loseitem"><div class="dred"></div>Déjeuner planifié avant les courses (dépendance manquée)</div>
+    <div class="loseitem"><div class="dred"></div>Courrier après 12h — guichet fermé</div>
+    <div class="loseitem"><div class="dred"></div>5 réajustements effectués</div>
+  </div>
+  <div class="scorebox" style="background:rgba(229,57,53,.07);border:1px solid rgba(229,57,53,.16)">
+    <div class="pts" style="color:var(--re)">4<span class="mx">/10</span></div>
+    <div class="lv" style="color:var(--tm)">Faible — organisation séquentielle à travailler</div>
+  </div>
+  <div class="endbtns">
+    <button class="btnP" style="background:linear-gradient(135deg,var(--re),var(--re2))">↺ Réessayer</button>
+    <button class="btnO">← Accueil</button>
+  </div>
+</div>`;}
+
+/* ══════════════════════════════════════════
+   THINKFIRST
+   Scénario : Sophie, 42 ans, ingénieure.
+   4 disques à déplacer de la Tour A
+   vers la Tour C, en utilisant B.
+   Elle doit planifier TOUTE la séquence
+   (15 moves minimum) avant exécution.
+══════════════════════════════════════════ */
+function tf(s){
+  if(s==='home')return tfHome();
+  if(s==='t1')return tfT(0);
+  if(s==='t2')return tfT(1);
+  if(s==='gn')return tfGame('n');
+  if(s==='ge')return tfGame('e');
+  if(s==='gs')return tfGame('s');
+  if(s==='pause')return pauseCard(`<div style="width:40px;height:40px;border-radius:50%;background:var(--bl);display:flex;align-items:center;justify-content:center">${logoTF(28)}</div>`,'#080A1A','#5B8DEF','Moves','6/15','Erreurs','1/3');
+  if(s==='win')return tfEnd(true);
+  if(s==='lose')return tfEnd(false);
+  return tfHome();
+}
+function tfHome(){return`
+<div class="sc home tf-bg on">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 65% 45% at 50% 20%,rgba(91,141,239,.11) 0%,transparent 68%)"></div>
+  <div class="lc" style="background:#080A1A;box-shadow:0 0 0 1px #141840,0 8px 28px rgba(91,141,239,.18)">
+    <div style="width:68px;height:68px;border-radius:50%;background:var(--bl);display:flex;align-items:center;justify-content:center">${logoTF(50)}</div>
+  </div>
+  <div class="gtit">ThinkFirst</div>
+  <div class="gsub" style="color:var(--bl)">Sequence Planning</div>
+  <div class="gdesc">Sophie doit déplacer 4 disques de la Tour A vers la Tour C. Elle doit planifier toute la séquence à l'avance — la machine exécute exactement ce qu'elle a prévu, sans corrections possibles.</div>
+  <div class="btns">
+    <button class="btnP" style="background:linear-gradient(135deg,var(--bl),var(--bl2));box-shadow:0 4px 18px rgba(91,141,239,.28)">▶ Jouer</button>
+    <button class="btnO">📖 Tutoriel</button>
+  </div>
+  <div class="sbadge"><div><div class="sl">Meilleur score</div><div class="sv" style="color:var(--bl)">6/10</div></div><div style="margin-left:auto;font-size:22px">🥈</div></div>
+</div>`;}
+
+function tfT(i){
+  const steps=[
+    {title:'La règle fondamentale',desc:'Sophie ne peut jamais poser un grand disque sur un plus petit. Elle utilise la Tour B comme relais. Chaque mouvement = déplacer le disque du DESSUS d\'une tour vers une autre.',
+    illus:`<div style="display:flex;gap:10px;align-items:flex-end;padding:14px;justify-content:center">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div style="width:32px;height:16px;border-radius:3px;background:linear-gradient(135deg,#4CAF50,#2E7D32);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#fff">1</div>
+        <div style="width:46px;height:16px;border-radius:3px;background:linear-gradient(135deg,var(--or),var(--or2));display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#fff">2</div>
+        <div style="width:62px;height:16px;border-radius:3px;background:linear-gradient(135deg,var(--re),var(--re2));display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#fff">3</div>
+        <div style="width:78px;height:16px;border-radius:3px;background:linear-gradient(135deg,var(--bl),var(--bl2));display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#fff">4</div>
+        <div style="width:3px;height:8px;background:rgba(255,255,255,.1)"></div><div style="font-size:8px;color:var(--td);font-weight:800">Tour A</div>
+      </div>
+      <div style="font-size:18px;color:var(--bl)">→</div>
+      <div style="display:flex;flex-direction:column;align-items:center">
+        <div style="width:3px;height:78px;background:rgba(255,255,255,.1)"></div><div style="font-size:8px;color:var(--td);font-weight:800">Tour B</div>
+      </div>
+      <div style="font-size:18px;color:var(--bl)">→</div>
+      <div style="display:flex;flex-direction:column;align-items:center">
+        <div style="width:3px;height:78px;background:rgba(255,255,255,.1)"></div><div style="font-size:8px;color:var(--td);font-weight:800">Tour C</div>
+      </div>
+      <div style="position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--td);white-space:nowrap">🎯 Tout déplacer vers Tour C</div>
+    </div>`},
+    {title:'Planifie AVANT d\'agir',desc:'Sophie renseigne toute la séquence (1 → 2 → 3…) AVANT l\'exécution. Une fois lancé, impossible de corriger. Seulement 3 erreurs d\'ordre tolérées. Minimum 15 mouvements pour 4 disques.',
+    illus:`<div style="display:flex;flex-direction:column;gap:5px;padding:12px;width:100%">
+      <div style="font-size:9px;color:var(--td);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Séquence planifiée par Sophie :</div>
+      ${[['1','🟢','A→C'],['2','🟡','A→B'],['3','🟢','C→B'],['4','🔵','A→C'],['5','?','à planifier']].map(([n,e,d],ii)=>`
+      <div style="display:flex;align-items:center;gap:6px;${ii<4?'background:rgba(91,141,239,.09);border:1px solid rgba(91,141,239,.2)':'background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.1)'};border-radius:6px;padding:4px 7px">
+        <div style="font-size:8px;color:var(--td);font-weight:700;width:10px">${n}</div>
+        <div style="font-size:12px">${e}</div>
+        <div style="font-size:9px;font-weight:800;color:${ii<4?'#fff':'var(--td)'};">${d}</div>
+        ${ii<4?`<div style="margin-left:auto;font-size:8px;color:var(--td)">planifié</div>`:`<div style="margin-left:auto;font-size:8px;background:rgba(91,141,239,.18);color:var(--bl);padding:1px 5px;border-radius:5px;font-weight:800">ajouter +</div>`}
+      </div>`).join('')}
+    </div>`}
+  ];
+  const st=steps[i];
+  return`
+<div class="sc tsc on">
+  <div class="thdr"><div class="ttit">🗼 ThinkFirst — Comment jouer</div><div class="tskip">Passer</div></div>
+  <div class="tbdy">
+    <div class="till">${st.illus}</div>
+    <div class="ttit2">${st.title}</div>
+    <div class="tdesc">${st.desc}</div>
+    <div class="dots"><div class="dot${i===0?' on':''}" style="${i===0?'background:var(--bl)':''}"></div><div class="dot${i===1?' on':''}" style="${i===1?'background:var(--bl)':''}"></div></div>
+  </div>
+  <div class="tfoot"><button class="btnP" style="background:linear-gradient(135deg,var(--bl),var(--bl2))">${i===0?'Suivant →':'Commencer ▶'}</button></div>
+</div>`;}
+
+function tfGame(state){
+  // Tower states:
+  // n = initial, séquence en cours de construction (A=[1,2,3,4] B=[] C=[])
+  // e = mid avec erreur (A=[4] B=[3,2] C=[1] — move 8 erreur détectée)
+  // s = séquence complète prête à exécuter (A=[] B=[] C=[1,2,3,4])
+  const tws={
+    n:{A:['d1','d2','d3','d4'],B:[],C:[]},
+    e:{A:['d4'],B:['d3','d2'],C:['d1']},
+    s:{A:[],B:[],C:['d1','d2','d3','d4']},
+  };
+  const tw=tws[state];
+  const dW={d1:32,d2:48,d3:64,d4:80};
+  const dLbl={d1:'1',d2:'2',d3:'3',d4:'4'};
+  const dColor={d1:'d1',d2:'d2',d3:'d3',d4:'d4'};
+
+  function tower(name,discs){
+    return`<div class="tc">
+      <div class="tdc">
+        ${discs.map(d=>`<div class="disc ${dColor[d]} ${state==='e'&&d==='d2'&&name==='B'?'err-disc':''}" style="width:${dW[d]}px">${dLbl[d]}</div>`).join('')}
+      </div>
+      <div class="tpole"></div>
+      <div class="tbase"></div>
+      <div class="tlbl">Tour ${name}</div>
+    </div>`;}
+
+  // sequence cards
+  const seqN=[
+    {n:'1',e:'🟢',d:'A→C',f:true},{n:'2',e:'🟡',d:'A→B',f:true},{n:'3',e:'🟢',d:'C→B',f:true},
+    {n:'4',e:'🔵',d:'A→C',f:true},{n:'5',e:'',d:'',f:false},{n:'6',e:'',d:'',f:false},{n:'7',e:'',d:'',f:false},
+  ];
+  const seqE=[
+    {n:'1',e:'🟢',d:'A→C',f:true},{n:'2',e:'🟡',d:'A→B',f:true},{n:'3',e:'🟢',d:'C→B',f:true},
+    {n:'4',e:'🔵',d:'A→C',f:true},{n:'5',e:'🟢',d:'B→A',f:true},{n:'6',e:'🟡',d:'B→?',f:true,err:true},{n:'7',e:'',d:'',f:false},
+  ];
+  const seqS=[
+    {n:'1',e:'🟢',d:'A→B',f:true},{n:'2',e:'🟡',d:'A→C',f:true},{n:'3',e:'🟢',d:'B→C',f:true},
+    {n:'4',e:'🔵',d:'A→B',f:true},{n:'5',e:'🟢',d:'C→A',f:true},{n:'6',e:'🟡',d:'C→B',f:true},{n:'7',e:'🟢',d:'A→B',f:true},
+  ];
+  const seqMap={n:seqN,e:seqE,s:seqS};
+  const seq=seqMap[state];
+  const placed=seq.filter(s=>s.f).length;
+  const erreurs=state==='e'?'1':state==='s'?'0':'0';
+  const moves=state==='n'?4:state==='e'?6:7;
+
+  return`
+<div class="sc tf-bg on" style="flex-direction:column">
+  <div class="hud">
+    <div class="hi"><div class="hl">Moves planifiés</div><div class="hv" style="color:var(--bl)">${moves}/15</div></div>
+    <div class="hsep"></div>
+    <div class="hi"><div class="hl">Erreurs</div><div class="hv" style="color:${erreurs!=='0'?'var(--re)':'var(--gr)'}">${erreurs}/3</div></div>
+    <div class="hsep"></div>
+    <div class="hi"><div class="hl">Superflus</div><div class="hv">${state==='s'?'0':'—'}</div></div>
+    <div class="hsep"></div>
+    <div style="font-size:17px;cursor:pointer">⏸</div>
+  </div>
+  <div class="tw-area">
+    <div class="tw-hint">🎯 Cible : Tour C — disque 1 au-dessus, 4 en bas</div>
+    ${tower('A',tw.A)}
+    ${tower('B',tw.B)}
+    ${tower('C',tw.C)}
+  </div>
+  ${state==='e'?`<div style="padding:3px 12px 0;font-size:9px;color:var(--re);font-weight:700;text-align:center">⚠️ Move 6 invalide — grand disque sur petit (erreur 1/3)</div>`:''}
+  ${state==='s'?`<div style="padding:3px 12px 0;font-size:9px;color:var(--gr);font-weight:700;text-align:center">✓ Séquence complète — prête à exécuter (15 moves, 0 superflu)</div>`:''}
+  <div class="seq-s">
+    <div class="seqtit">📋 Séquence de Sophie (${placed}/15 renseignés)</div>
+    <div class="seq-row">
+      ${seq.map(sc=>`<div class="scard ${sc.f?sc.err?'errc':'fld':''} ${!sc.f?'add':''}">
+        <div class="sn">${sc.n}</div>
+        <div class="sm">${sc.f?(sc.err?'⛔':sc.e):'<span style="color:rgba(255,255,255,.18);font-size:16px">+</span>'}</div>
+        <div class="sd" style="color:${sc.err?'var(--re)':'var(--td)'}">${sc.f?sc.d:''}</div>
+      </div>`).join('')}
+      ${state!=='s'?`<div class="scard add"><div class="sm" style="font-size:16px;color:rgba(255,255,255,.18)">+</div></div>`:''}
+    </div>
+  </div>
+  <div class="gfoot">
+    <button class="bc clr">✕ Effacer séq.</button>
+    <button class="bc val" style="background:linear-gradient(135deg,${state==='s'?'var(--bl),var(--bl2)':'rgba(255,255,255,.08),rgba(255,255,255,.04)'});color:${state==='s'?'#040810':'var(--td)'}">
+      ${state==='s'?'▶ Exécuter':'▶ Ajouter move'}
+    </button>
+  </div>
+</div>`;}
+
+function tfEnd(win){
+  if(win){return`
+<div class="sc endsc on" style="background:linear-gradient(160deg,#08091A 0%,#040610 100%)">
+  ${confetti(['#5B8DEF','#F5A623','#4CAF50','#fff'])}
+  <div class="end-ico">🗼</div>
+  <div class="end-tit">Tour reconstruite !</div>
+  <div class="end-sub" style="color:var(--bl)">Sophie a planifié la séquence parfaite</div>
+  <div class="scorebox" style="background:rgba(91,141,239,.08);border:1px solid rgba(91,141,239,.2)">
+    <div class="pts" style="color:var(--bl)">9<span class="mx">/10</span></div>
+    <div class="lv">🥇 Excellent</div>
+  </div>
+  <div class="critlist">
+    <div class="crow"><div class="clbl">Séquence correcte (1er essai)</div><div class="cbw"><div class="cb" style="width:100%;background:var(--bl)"></div></div><div class="cpts">4/4</div></div>
+    <div class="crow"><div class="clbl">Erreurs d'ordre (0)</div><div class="cbw"><div class="cb" style="width:100%;background:var(--bl)"></div></div><div class="cpts">3/3</div></div>
+    <div class="crow"><div class="clbl">Moves superflus (&lt;10%)</div><div class="cbw"><div class="cb" style="width:66%;background:var(--or)"></div></div><div class="cpts">2/3</div></div>
+  </div>
+  <div class="endbtns">
+    <button class="btnP" style="background:linear-gradient(135deg,var(--bl),var(--bl2))">Voir mes résultats →</button>
+    <button class="btnO">↺ Rejouer</button>
+  </div>
+</div>`;}
+  return`
+<div class="sc endsc on" style="background:linear-gradient(160deg,#08091A 0%,#040610 100%)">
+  <div class="end-ico">🗼</div>
+  <div class="end-tit" style="color:var(--re)">Séquence invalide</div>
+  <div class="end-sub" style="color:var(--tm)">Sophie a dépassé le nombre d'erreurs autorisées</div>
+  <div class="losebox">
+    <div class="losetit">Erreurs détectées</div>
+    <div class="loseitem"><div class="dred"></div>3 erreurs d'ordre dépassées (grand disque sur petit)</div>
+    <div class="loseitem"><div class="dred"></div>4 mouvements superflus (+27% vs optimal)</div>
+    <div class="loseitem"><div class="dred"></div>Exécution interrompue au move 9</div>
+  </div>
+  <div class="scorebox" style="background:rgba(229,57,53,.07);border:1px solid rgba(229,57,53,.16)">
+    <div class="pts" style="color:var(--re)">2<span class="mx">/10</span></div>
+    <div class="lv" style="color:var(--tm)">Très faible — planification hiérarchique à retravailler</div>
+  </div>
+  <div class="endbtns">
+    <button class="btnP" style="background:linear-gradient(135deg,var(--re),var(--re2))">↺ Réessayer</button>
+    <button class="btnO">← Accueil</button>
+  </div>
+</div>`;}
+
+/* ══════════════════════════════════════════
+   RÉSULTATS GLOBAUX
+══════════════════════════════════════════ */
+function resHTML(){return`
+<div class="sc ressc on" style="flex-direction:column;overflow-y:auto">
+  <div class="rh">
+    <div class="re2">📊</div>
+    <div class="rt">Profil de Planification</div>
+    <div class="rsub">Module "Je planifie" — Score total</div>
+  </div>
+  <div class="rglobal" style="background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.18)">
+    <div class="gpts" style="color:var(--or)">24<span style="font-size:16px;color:var(--td)">/30</span></div>
+    <div class="glv">🥇 Bon — Planification globalement cohérente</div>
+    <div style="font-size:10px;color:var(--td);margin-top:2px">Quelques inefficacités mineures détectées</div>
+  </div>
+  <div class="sublist">
+    <div class="srow"><div class="sico">🗺️</div><div class="sinf"><div class="snm">PathMind — Chemin Optimal</div><div class="sbw"><div class="sbar" style="width:80%;background:var(--or)"></div></div></div><div class="ssc" style="color:var(--or)">8/10</div></div>
+    <div class="srow"><div class="sico">📅</div><div class="sinf"><div class="snm">DayStack — Planning Journalier</div><div class="sbw"><div class="sbar" style="width:70%;background:var(--gr)"></div></div></div><div class="ssc" style="color:var(--gr)">7/10</div></div>
+    <div class="srow"><div class="sico">🗼</div><div class="sinf"><div class="snm">ThinkFirst — Puzzle Prévisionnel</div><div class="sbw"><div class="sbar" style="width:90%;background:var(--bl)"></div></div></div><div class="ssc" style="color:var(--bl)">9/10</div></div>
+  </div>
+  <div class="interp">
+    <div class="itit">Interprétation clinique</div>
+    <div class="itxt">Raisonnement structuré et globalement cohérent. Légères difficultés dans l'ordre logique et la gestion des ressources temporelles. La planification hiérarchisée (ThinkFirst) est un point fort notable.</div>
+  </div>
+  <div style="padding-bottom:4px">
+    <button class="btnP">✓ Terminer le module</button>
+  </div>
+</div>`;}
+
+render();
+</script>
+</body>
+</html>
